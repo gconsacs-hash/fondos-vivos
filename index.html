@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0d0f14">
+<title>Fondos Vivos</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icono.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icono.svg">
+<link rel="stylesheet" href="css/estilos.css">
+</head>
+<body>
+
+<header id="barra">
+  <h1>Fondos Vivos</h1>
+  <button id="btnPantalla" class="icono" title="Ver a pantalla completa">⛶</button>
+</header>
+
+<main>
+  <div id="escenario">
+    <canvas id="lienzo"></canvas>
+    <div id="guias" hidden>
+      <div class="guia-reloj">
+        <span class="hora">9:41</span>
+        <span class="fecha">jueves 1 de octubre</span>
+      </div>
+      <div class="guia-iconos">
+        <span></span><span></span><span></span><span></span>
+      </div>
+    </div>
+    <div id="hud"></div>
+    <button id="btnSalirPantalla" class="icono" hidden title="Salir">✕</button>
+  </div>
+
+  <div id="panelera">
+    <section id="panel-fondo" class="panel">
+      <div class="grupo">
+        <label>Estilo</label>
+        <div id="estilos" class="chips"></div>
+      </div>
+      <div class="grupo">
+        <label>Color</label>
+        <div id="paletas" class="chips"></div>
+      </div>
+      <div class="fila">
+        <button id="btnVariar" class="primario">Otra variación</button>
+        <button id="btnSorpresa">Sorpréndeme</button>
+        <label class="check"><input type="checkbox" id="chkGuias"> Guías</label>
+      </div>
+    </section>
+
+    <section id="panel-rostro" class="panel" hidden>
+      <div class="grupo">
+        <label>Rostro</label>
+        <div id="rostros" class="chips"></div>
+      </div>
+      <div class="grupo">
+        <label>Color y fondo</label>
+        <div id="paletasRostro" class="chips"></div>
+      </div>
+      <div class="fila">
+        <label class="campo">Fondo
+          <select id="fondoRostro"></select>
+        </label>
+        <button id="btnVariarRostro">Variar fondo</button>
+      </div>
+      <div class="fila">
+        <label class="campo">Tamaño
+          <input type="range" id="tamano" min="0.16" max="0.42" step="0.01">
+        </label>
+        <label class="campo">Altura
+          <input type="range" id="altura" min="0.22" max="0.62" step="0.01">
+        </label>
+      </div>
+      <div class="fila">
+        <button id="btnMic">Escuchar voz</button>
+        <button id="btnSensores">Activar sensores</button>
+      </div>
+      <p class="nota">Reacciona a: tocar (sorpresa), doble toque (corazones), arrastrar el dedo
+        (la mirada te sigue), inclinar el teléfono, sacudirlo (mareo), la hora, la batería
+        y el nivel de carga. Con el micrófono encendido, canta contigo.</p>
+    </section>
+
+    <section id="panel-retrato" class="panel" hidden>
+      <div class="grupo">
+        <label>1 · Tu imagen</label>
+        <input type="file" id="archivoFoto" accept="image/*">
+        <p class="nota">Sirve una foto tuya o una captura de una serie o anime que tengas en el
+          teléfono. La imagen se procesa aquí mismo: no se sube a ninguna parte. Ojo: una imagen
+          de una serie tiene derechos de autor, está bien para tu propio fondo de pantalla, no
+          para publicarla ni venderla.</p>
+      </div>
+      <div class="grupo">
+        <label>2 · Si hay un rostro, marca los puntos (opcional)</label>
+        <div class="fila">
+          <button id="btnOjoI" data-marca="ojoI">Ojo izquierdo</button>
+          <button id="btnOjoD" data-marca="ojoD">Ojo derecho</button>
+          <button id="btnBoca" data-marca="boca">Centro de la boca</button>
+        </div>
+        <p id="estadoMarcas" class="nota">Sin marcar: la imagen se mueve con la inclinación y
+          con el efecto que elijas. Marcando los ojos y la boca, además parpadea, te sigue con
+          la mirada y sonríe.</p>
+      </div>
+      <div class="fila">
+        <label class="campo">Intensidad
+          <input type="range" id="fuerza" min="0.6" max="1.6" step="0.05" value="1">
+        </label>
+        <label class="campo">Tamaño de ojos
+          <input type="range" id="tamanoOjo" min="0.2" max="0.6" step="0.01" value="0.3">
+        </label>
+        <label class="campo">Encuadre
+          <input type="range" id="desplaz" min="-0.15" max="0.2" step="0.01" value="0">
+        </label>
+      </div>
+      <p class="nota">Sube «Tamaño de ojos» si el personaje es de anime (ojos grandes) hasta que
+        el parpadeo tape el ojo completo; bájalo en una foto normal.</p>
+    </section>
+
+    <section id="panel-galeria" class="panel" hidden>
+      <div id="listaGaleria" class="galeria"></div>
+      <div class="fila">
+        <button id="btnLimpiarGaleria">Vaciar galería</button>
+      </div>
+    </section>
+
+    <section id="efectosSec" class="panel">
+      <div class="grupo">
+        <label>Efecto en movimiento</label>
+        <div id="efectos" class="chips"></div>
+      </div>
+      <p class="nota">Se dibuja encima de cualquier fondo, rostro o imagen. La inclinación mueve
+        el viento, el dedo atrae a las luciérnagas y cada toque deja una onda.</p>
+    </section>
+
+    <section id="exportar">
+      <div class="fila">
+        <label class="campo">Resolución
+          <select id="resolucion"></select>
+        </label>
+        <label class="campo">Duración
+          <select id="duracion">
+            <option value="3">3 s</option>
+            <option value="5" selected>5 s</option>
+            <option value="8">8 s</option>
+          </select>
+        </label>
+      </div>
+      <div class="fila">
+        <button id="btnPng" class="primario">Guardar PNG</button>
+        <button id="btnGif">GIF animado</button>
+        <button id="btnWebm">Vídeo WebM</button>
+        <button id="btnGuardar">★ Galería</button>
+      </div>
+      <div id="progreso" hidden><div class="barra"><i></i></div><span></span></div>
+      <p id="aviso" class="nota"></p>
+    </section>
+  </div>
+</main>
+
+<nav id="nav">
+  <button data-vista="fondo" class="activo">Fondos</button>
+  <button data-vista="rostro">Rostros</button>
+  <button data-vista="retrato">Imagen viva</button>
+  <button data-vista="galeria">Galería</button>
+</nav>
+
+<script src="js/nucleo.js"></script>
+<script src="js/paletas.js"></script>
+<script src="js/gif.js"></script>
+<script src="js/fondos.js"></script>
+<script src="js/rostros.js"></script>
+<script src="js/efectos.js"></script>
+<script src="js/sensores.js"></script>
+<script src="js/retrato.js"></script>
+<script src="js/exportar.js"></script>
+<script src="js/galeria.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
