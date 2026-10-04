@@ -5,7 +5,30 @@ dibujados que reaccionan al teléfono, y cualquier imagen tuya convertida en fon
 movimiento. Todo se procesa en el equipo o en el teléfono: nada se sube a internet y no
 necesita claude.ai ni ninguna cuenta.
 
-## Cómo abrirla
+## Dónde está publicada
+
+**https://gconsacs-hash.github.io/fondos-vivos/** — ésta es la que se instala en el teléfono.
+
+Para instalarla: abre esa dirección en Chrome del celular → menú (⋮) → **Instalar aplicación**
+(o «Agregar a pantalla principal»). Queda con su icono y, después de la primera carga,
+funciona sin internet.
+
+Tiene que ser por HTTPS: desde `http://192.168.x.x:3400` la página se ve, pero Chrome no
+deja instalarla ni usar la inclinación, la sacudida ni el micrófono.
+
+### Publicar los cambios
+
+Después de modificar cualquier archivo:
+
+```
+node publicar.js "lo que cambié"
+```
+
+Sube todo a GitHub por la API (no hace falta tener git instalado, sí la sesión de
+`gh auth login`) y GitHub Pages se actualiza en uno o dos minutos. En el teléfono, el
+cambio entra al abrir la app con internet.
+
+## Cómo abrirla en el PC
 
 - Doble clic en **Iniciar.cmd**. Abre `http://localhost:3400`.
 - Desde el teléfono (misma red wifi): la consola muestra una línea
@@ -81,6 +104,7 @@ produzca un archivo que se vuelve a decodificar igual.
 
 ```
 index.html            interfaz
+publicar.js           sube la carpeta a GitHub Pages usando la sesión de gh
 css/estilos.css       estilos
 js/nucleo.js          azar con semilla, color, ruido, descargas
 js/paletas.js         16 paletas
